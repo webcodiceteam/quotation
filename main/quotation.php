@@ -42,19 +42,19 @@ The above copyright notice and this permission notice shall be included in all c
       <div class="sidebar-wrapper">
         <ul class="nav">
           <li class="nav-item active">
-            <a class="nav-link" href="./quotation.html">
+            <a class="nav-link" href="./quotation.php">
               <i class="material-icons">content_paste</i>
               <p>Quotation</p>
             </a>
           </li>
            <li class="nav-item">
-            <a class="nav-link" href="./invoice.html">
+            <a class="nav-link" href="./invoice.php">
               <i class="material-icons">content_paste</i>
               <p>Invoice</p>
             </a>
           </li>
           <li class="nav-item">
-           <a class="nav-link" href="./billing.html">
+           <a class="nav-link" href="./billing.php">
               <i class="material-icons">content_paste</i>
               <p>Billing</p>
             </a>
@@ -142,13 +142,13 @@ The above copyright notice and this permission notice shall be included in all c
                   <p class="card-category">Info</p>
                 </div>
                 <div class="card-body">
-                  <form>
+                  <form action="" method="POST">
                     <div class="row">
                       
                       <div class="col-md-12">
                         <div class="form-group">
                           <label class="bmd-label-floating">Company Name</label>
-                          <input type="text" class="form-control">
+                          <input name="cname" type="text" class="form-control" id="cname">
                         </div>
                       </div>
                       </div>
@@ -156,13 +156,13 @@ The above copyright notice and this permission notice shall be included in all c
                       <div class="col-md-6">
                         <div class="form-group">
                           <label class="bmd-label-floating">Fist Name</label>
-                          <input type="text" class="form-control">
+                          <input name="fname" type="text" class="form-control" id="fname" >
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
                           <label class="bmd-label-floating">Last Name</label>
-                          <input type="text" class="form-control">
+                          <input name="lname" type="text" class="form-control" id="lname" >
                         </div>
                       </div>
                     </div>
@@ -171,7 +171,7 @@ The above copyright notice and this permission notice shall be included in all c
                       <div class="col-md-12">
                        <div class="form-group">
                           <label class="bmd-label-floating">Price(In dollars)</label>
-                          <input type="text" class="form-control">
+                          <input name="price" type="text" class="form-control" id="price">
                         </div>
                       </div>
                     </div>
@@ -181,34 +181,37 @@ The above copyright notice and this permission notice shall be included in all c
                       <div class="col-md-12">
                         <div class="form-group">
                           <label class="bmd-label-floating">Address</label>
-                          <input type="text" class="form-control">
+                          <input name="add" type="text" class="form-control" id="add" >
                         </div>
                       </div>
                     </div>
                    
-                    <button type="submit" class="btn btn-primary pull-right">Submit</button>
+                    <button value="Submit" name="done" type="submit" class="btn btn-primary pull-right">Submit</button>
                     <div class="clearfix"></div>
                   </form>
+
+                  <?php
+
+
+                  if(isset($_POST{'cname'}) && isset($_POST['fname']) && isset($_POST['lname']) && isset($_POST['price']) && isset($_POST['add'])
+                )
+                  {
+                    echo "<h3> Your Quotation Details</h3>";
+                    echo "Company name - " . $_POST['cname'] . "<br>";
+                    echo "First name - " . $_POST['fname'] . "<br>";
+                    echo "Last name - " . $_POST['lname'] . "<br>";
+                    echo "Price - " . $_POST['price'] . "<br>";
+                    echo "Address - " . $_POST['add'] . "<br>";
+                  }
+                  
+                  ?>
+
+
+
                 </div>
               </div>
             </div>
-            <!-- <div class="col-md-4">
-              <div class="card card-profile">
-                <div class="card-avatar">
-                  <a href="javascript:;">
-                    <img class="img" src="../assets/img/faces/marc.jpg" />
-                  </a>
-                </div>
-                <div class="card-body">
-                  <h6 class="card-category text-gray">CEO / Co-Founder</h6>
-                  <h4 class="card-title">Alec Thompson</h4>
-                  <p class="card-description">
-                    Don't be scared of the truth because we need to restart the human foundation in truth And I love you like Kanye loves Kanye I love Rick Owens’ bed design but the back is...
-                  </p>
-                  <a href="javascript:;" class="btn btn-primary btn-round">Follow</a>
-                </div>
-              </div>
-            </div> -->
+            
           </div>
         </div>
       </div>

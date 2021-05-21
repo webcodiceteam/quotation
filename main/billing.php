@@ -33,19 +33,19 @@
       <div class="sidebar-wrapper">
         <ul class="nav">
           <li class="nav-item ">
-            <a class="nav-link" href="./quotation.html">
+            <a class="nav-link" href="./quotation.php">
               <i class="material-icons">content_paste</i>
               <p>Quotation</p>
             </a>
           </li>
            <li class="nav-item ">
-            <a class="nav-link" href="./invoice.html">
+            <a class="nav-link" href="./invoice.php">
               <i class="material-icons">content_paste</i>
               <p>Invoice</p>
             </a>
           </li>
           <li class="nav-item active  ">
-           <a class="nav-link" href="./billing.html">
+           <a class="nav-link" href="./billing.php">
               <i class="material-icons">content_paste</i>
               <p>Billing</p>
             </a>
@@ -188,11 +188,11 @@
                 )
                   {
                     echo "<h3> Your Billing Details</h3>";
-                    echo "Company name" . $_POST['cname'] . "<br>";
-                    echo "First name" . $_POST['fname'] . "<br>";
-                    echo "Last name" . $_POST['lname'] . "<br>";
-                    echo "Price" . $_POST['price'] . "<br>";
-                    echo "Address" . $_POST['add'] . "<br>";
+                    echo "Company name - " . $_POST['cname'] . "<br>";
+                    echo "First name - " . $_POST['fname'] . "<br>";
+                    echo "Last name - " . $_POST['lname'] . "<br>";
+                    echo "Price - " . $_POST['price'] . "<br>";
+                    echo "Address - " . $_POST['add'] . "<br>";
                   }
                   
                   ?>
