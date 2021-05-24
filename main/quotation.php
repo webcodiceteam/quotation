@@ -1,18 +1,51 @@
-<!--
-=========================================================
-Material Dashboard - v2.1.2
-=========================================================
+<?php
+error_reporting(0);
 
-Product Page: https://www.creative-tim.com/product/material-dashboard
-Copyright 2020 Creative Tim (https://www.creative-tim.com)
-Coded by Creative Tim
+require('db.php');
 
-=========================================================
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. -->
+
+$conn = mysqli_connect('localhost', 'root', '');
+if ($conn) {
+echo "";
+} else {
+echo "no connection";
+}
+mysqli_select_db($conn, 'dashboard');
+
+if (isset($_POST['done'])) {
+$company_name = $_POST['cname'];
+$first_name = $_POST['fname'];
+$last_name = $_POST['lname'];
+$price = $_POST['price'];
+$gstrate = $_POST['gstrate'];
+$c = ($price*$gstrate)/100;
+$d = $c+$price;
+
+$address = $_POST['add'];
+date_default_timezone_set("Asia/Calcutta");
+$c_time = date(" H:i:s");
+
+
+$sql = "INSERT INTO
+quotation (company_name,first_name,last_name, price, address, c_time) VALUES ('$company_name','$first_name', '$last_name', '$d','$address', '$c_time')";
+if ($conn->query($sql) === TRUE) {
+echo "<script>alert('New Record created successfully');</script>";
+} else {
+echo "Error: " . $sql . "<br>" . $conn->error;
+}
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+  <style type="text/css">
+    .pagination {
+    background: white;
+    padding: 18px;
+    float: right;
+}
+  </style>
   <meta charset="utf-8" />
   <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="../assets/img/favicon.png">
@@ -28,11 +61,12 @@ The above copyright notice and this permission notice shall be included in all c
   <link href="../assets/css/material-dashboard.css?v=2.1.2" rel="stylesheet" />
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="../assets/demo/demo.css" rel="stylesheet" />
+
 </head>
 
 <body class="">
   <div class="wrapper ">
-    <div class="sidebar" data-color="purple" data-background-color="white" data-image="../assets/img/sidebar-1.jpg">
+    <div class="sidebar" data-color="purplee" data-background-color="white" data-image="../assets/img/sidebar-1.jpg">
       <!--
         Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
 
@@ -175,9 +209,18 @@ The above copyright notice and this permission notice shall be included in all c
                         </div>
                       </div>
                     </div>
-                    
-                    
-                    <div class="row">
+
+                    <div class="col-md-12" style="display: none;">
+                       <div class="form-group">
+                          <label class="bmd-label-floating">Select GST</label>
+                           <select type="hidden" class="form-control" id="sel1" name="gstrate">
+                              <option>15%</option>
+                              
+                            </select>
+                        </div>
+                      </div>
+                      
+                      <div class="row">
                       <div class="col-md-12">
                         <div class="form-group">
                           <label class="bmd-label-floating">Address</label>
@@ -185,12 +228,111 @@ The above copyright notice and this permission notice shall be included in all c
                         </div>
                       </div>
                     </div>
+                    </div>
+                    
+                    
+                    
                    
                     <button value="Submit" name="done" type="submit" class="btn btn-primary pull-right">Submit</button>
                     <div class="clearfix"></div>
                   </form>
 
                   <?php
+
+
+require('db.php');
+
+
+$conn = mysqli_connect('localhost','root','');
+if($conn){
+    echo "";
+}else{
+    echo "no connection";
+}
+mysqli_select_db($conn,'dashboard');
+
+$limit = 5;
+    if (isset($_GET["page"])) {
+        $pn = $_GET["page"];
+    } else {
+        $pn = 1;
+    };
+
+    $start_from = ($pn - 1) * $limit;
+
+$result =  mysqli_query($conn,"SELECT * FROM quotation order by id  DESC Limit $start_from, $limit")
+or die(mysqli_error($conn));
+
+echo "<table border='1' cellpadding='10'>";
+echo "<tr>
+<th><font color='black'>ID</font></th>
+<th><font color='black'>COMPANY NAME</font></th>
+<th><font color='black'>FIRST NAME</font></th>
+<th><font color='black'>LAST NAME</font></th>
+<th><font color='black'>PRICE(with GST of 15%)</font></th>
+<th><font color='black'>ADDRESS</font></th>
+<th><font color='black'>TIME</font></th>
+<th><font color='black'>VIEW</font></th>
+
+
+
+
+</tr>";
+
+while($row = mysqli_fetch_array( $result ))
+{
+
+echo "<tr>";
+echo '<td>ID - ' . $row['id'] . '</td>';
+
+echo '<td>' . $row['company_name'] . '</td>';
+echo '<td>' . $row['first_name'] . '</td>';
+echo '<td>' . $row['last_name'] . '</td>';
+echo '<td>' . $row['price'] . '</td>';
+echo '<td>' . $row['address'] . '<br></td>';
+echo '<td>' . $row['c_time'] . '<br></td>';
+echo '<td><b>
+<font color="#663300"><a class="new" href="view.php?id=' . $row['id'] . '"><i class="fa fa-eye"></i></a></font></b></td>';
+//echo '<td><b><font color="#663300"><a class="new"  href="deletecategory.php?id=' . $row['id'] . '"><i class="fa fa-trash"></i></a></font></b></td>';
+echo "</tr>";
+
+}
+
+echo "</table>";
+
+?>
+<div>
+                <ul class="pagination">
+                    <?php
+
+                    $query = "SELECT COUNT(*) FROM quotation";
+                    $rs_result = mysqli_query($conn, $query);
+                    $row = mysqli_fetch_row($rs_result);
+                    $total_records = $row[0];
+                    $total_pages = ceil($total_records / $limit);
+                    $k = (($pn + 4 > $total_pages) ? $total_pages - 4 : (($pn - 4 < 1) ? 5 : $pn));
+                    $pagLink = "";
+                    if ($pn >= 2) {
+                        echo "<li><a href='quotation.php?page=1'> << </a></li>";
+                        echo "<li><a href='quotation.php?page=" . ($pn - 1) . "'> < </a></li>";
+                    }
+                    for ($i = -4; $i <= 4; $i++) {
+                        if ($k + $i == $pn)
+                            $pagLink .= "<li class='active'><a href='quotation.php?page=" . ($k + $i) . "'>" . ($k + $i) . "</a></li>";
+                        else
+                            $pagLink .= "<li><a href='quotation.php?page=" . ($k + $i) . "'>" . ($k + $i) . "</a></li>";
+                    };
+                    echo $pagLink;
+                    if ($pn < $total_pages) {
+                        echo "<li><a href='quotation.php?page=" . ($pn + 1) . "'> > </a></li>";
+                        echo "<li><a href='quotation.php?page=" . $total_pages . "'> >> </a></li>";
+                    }
+                    ?>
+                </ul>
+
+            </div>
+
+                  <!-- <?php
 
 
                   if(isset($_POST{'cname'}) && isset($_POST['fname']) && isset($_POST['lname']) && isset($_POST['price']) && isset($_POST['add'])
@@ -204,7 +346,7 @@ The above copyright notice and this permission notice shall be included in all c
                     echo "Address - " . $_POST['add'] . "<br>";
                   }
                   
-                  ?>
+                  ?> -->
 
 
 
@@ -296,6 +438,7 @@ The above copyright notice and this permission notice shall be included in all c
   <script src="../assets/js/material-dashboard.js?v=2.1.2" type="text/javascript"></script>
   <!-- Material Dashboard DEMO methods, don't include it in your project! -->
   <script src="../assets/demo/demo.js"></script>
+
   <script>
     $(document).ready(function() {
       $().ready(function() {
